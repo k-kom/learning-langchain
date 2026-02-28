@@ -1,6 +1,7 @@
 import ast
 from typing import Annotated, TypedDict
 
+# conda repo doesn't have this
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_core.documents import Document
 from langchain_core.messages import HumanMessage
@@ -53,3 +54,11 @@ builder.add_edge("select_tools", "model")
 builder.add_conditional_edges("model", tools_condition)
 builder.add_edge("tools", "model")
 graph = builder.compile()
+
+user_input = {
+    "messages": [
+        HumanMessage("How old was the 30th president of the United Staes when he died?")]
+}
+
+for c in graph.stream(user_input, stream_mode='updates'):
+    print(c)
